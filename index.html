@@ -3,10 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <title>Earthquake Visualization</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
     #map { height: 600px; }
+    .legend { background-color: #fff; padding: 10px; border-radius: 5px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); }
+    .legend-item { margin-bottom: 5px; }
+    .legend i { width: 20px; height: 20px; margin-right: 8px; float: left; }
+    .legend strong { display: inline-block; width: 60px; }
   </style>
 </head>
 <body>
@@ -54,19 +59,19 @@ fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojso
     });
 
     // Create legend
-    var legend = L.control({position: 'bottomright'});
+    var legend = L.control({position: 'bottomleft'});
     legend.onAdd = function (map) {
       var div = L.DomUtil.create('div', 'info legend');
-      var labels = ['<strong>Depth</strong>'];
+      var labels = ['<strong>Legend</strong>'];
       var depths = [0, 30, 70];
       var colors = ['#FFFF00', '#FFA500', '#FF0000'];
 
       for (var i = 0; i < depths.length; i++) {
-        div.innerHTML += labels.push(
-          '<i style="background:' + colors[i] + '"></i> ' +
-          depths[i] + (depths[i + 1] ? '&ndash;' + depths[i + 1] + ' km' : '+'));
+        div.innerHTML += '<div class="legend-item">' +
+          '<i style="background:' + colors[i] + '"></i>' +
+          '<strong>' + depths[i] + (depths[i + 1] ? '&ndash;' + depths[i + 1] + ' km' : '+') + '</strong>' +
+          '</div>';
       }
-      div.innerHTML = labels.join('<br>');
       return div;
     };
     legend.addTo(map);
